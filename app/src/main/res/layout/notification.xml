@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/notificationIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/ic_phone_call_48dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_toEndOf="@+id/notificationIcon">
+
+        <TextView
+            android:id="@+id/notificationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/notificationTime"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="@string/app_name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#ffffffff" />
+
+        <TextView
+            android:id="@+id/notificationText"
+            android:layout_below="@+id/notificationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="@string/app_name"
+            android:textSize="14sp"
+            android:textColor="#aaffffff" />
+
+        <TextView
+            android:id="@+id/notificationTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="@string/app_name"
+            android:textSize="12sp"
+            android:textColor="#ffffffff" />
+    </RelativeLayout>
+</RelativeLayout>
