@@ -31,7 +31,7 @@ public class NotificationManager {
         this.context = context;
     }
 
-    public void showNotification() {
+    public void showNotification(boolean sticky) {
         TaskStackBuilder stack = TaskStackBuilder.create(context);
         stack.addParentStack(MainActivity.class);
         stack.addNextIntent(new Intent(context, MainActivity.class));
@@ -56,6 +56,9 @@ public class NotificationManager {
                 .setAutoCancel(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         Notification notification = builder.build();
+        if (sticky) {
+            notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+        }
         notificationManager.notify(NORMAL_NOTIFICATION_ID, notification);
     }
 }

@@ -31,12 +31,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.buttonNormal)
-    public void onLeftButtonClick() {
-        manager.showNotification();
+    public void onNormalButtonClick() {
+        manager.showNotification(false);
     }
 
     @OnClick(R.id.buttonCustom)
-    public void onRightButtonClick() {
-        customManager.showCustomNotification();
+    public void onCustomButtonClick() {
+        customManager.showCustomNotification(false);
+    }
+
+    @OnClick(R.id.buttonNormalSticky)
+    public void onNormalStickyButtonClick() {
+        manager.showNotification(true);
+    }
+
+    @OnClick(R.id.buttonCustomSticky)
+    public void onCustomStickyButtonClick() {
+        customManager.showCustomNotification(true);
     }
 }

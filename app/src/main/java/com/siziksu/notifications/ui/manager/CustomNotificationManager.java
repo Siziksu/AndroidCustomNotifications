@@ -28,7 +28,7 @@ public class CustomNotificationManager {
         this.context = context;
     }
 
-    public void showCustomNotification() {
+    public void showCustomNotification(boolean sticky) {
         RemoteViews remoteViews = getRemoteViews(
                 context,
                 R.layout.notification,
@@ -58,6 +58,9 @@ public class CustomNotificationManager {
                 .setAutoCancel(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         Notification notification = builder.build();
+        if (sticky) {
+            notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+        }
         notificationManager.notify(CUSTOM_NOTIFICATION_ID, notification);
     }
 

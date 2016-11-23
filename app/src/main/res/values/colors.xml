@@ -20,4 +20,5 @@
     <color name="notificationButtonDisabled">#ff838383</color>
     <color name="notificationButtonFocused">#acdc10</color>
     <color name="notificationButtonDefault">#4B6200</color>
+    <color name="textColorPrimary">#ffffff</color>
 </resources>
