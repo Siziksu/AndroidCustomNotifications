@@ -9,19 +9,21 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.siziksu.notifications.R;
-import com.siziksu.notifications.broadcast.NotificationListener;
+import com.siziksu.notifications.broadcast.NotificationReceiver;
 import com.siziksu.notifications.common.Utils;
 import com.siziksu.notifications.ui.activity.MainActivity;
 
 public class NotificationManager {
 
-    private static final int NORMAL_NOTIFICATION_ID = 1147;
-    private static final int NORMAL_NOTIFICATION_REQUEST_CODE = 1147;
+    private static final int NOTIFICATION_ID = 1147;
+    private static final int NOTIFICATION_REQUEST_CODE_CANCEL = 11470;
+    private static final int NOTIFICATION_REQUEST_CODE_DISMISS = 11471;
     private static final int NO_FLAGS = 0;
     private static final int NO_ICON = 0;
 
@@ -32,23 +34,31 @@ public class NotificationManager {
     }
 
     public void showNotification(boolean sticky) {
-        TaskStackBuilder stack = TaskStackBuilder.create(context);
-        stack.addParentStack(MainActivity.class);
-        stack.addNextIntent(new Intent(context, MainActivity.class));
-        PendingIntent pending;
-        if (!sticky) {
-            pending = stack.getPendingIntent(NORMAL_NOTIFICATION_REQUEST_CODE, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pending = getPendingCancelIntent(sticky);
+        PendingIntent pendingCancel = getPendingReceiver(NOTIFICATION_REQUEST_CODE_CANCEL, NOTIFICATION_ID, NotificationReceiver.ACTION_CANCEL);
+        PendingIntent pendingDismiss = getPendingReceiver(NOTIFICATION_REQUEST_CODE_DISMISS, NOTIFICATION_ID, NotificationReceiver.ACTION_DISMISS);
+        NotificationCompat.Builder builder = getBuilder(pending, pendingCancel, pendingDismiss);
+        Notification notification = getNotification(sticky, builder);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.notify(NOTIFICATION_ID, notification);
+    }
+
+    @NonNull
+    private Notification getNotification(boolean sticky, NotificationCompat.Builder builder) {
+        Notification notification = builder.build();
+        if (sticky) {
+            notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
         } else {
-            pending = PendingIntent.getActivity(context, NORMAL_NOTIFICATION_REQUEST_CODE, new Intent(), NO_FLAGS);
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
         }
-        Intent cancel = new Intent(NotificationListener.INTENT);
-        cancel.putExtra(NotificationListener.EXTRA_ID, NORMAL_NOTIFICATION_ID);
-        cancel.putExtra(NotificationListener.EXTRA_ACTION, NotificationListener.ACTION_CANCEL);
-        PendingIntent pendingCancel = PendingIntent.getBroadcast(context, NORMAL_NOTIFICATION_REQUEST_CODE, cancel, NO_FLAGS);
+        return notification;
+    }
+
+    private NotificationCompat.Builder getBuilder(PendingIntent pending, PendingIntent pendingCancel, PendingIntent pendingDismiss) {
         Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.notification_icon);
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle().bigText(Utils.getSpannable());
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        return new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_phone_call_24dp)
                 .setLargeIcon(icon)
                 .setContentTitle(context.getString(R.string.jane_doe))
@@ -57,14 +67,28 @@ public class NotificationManager {
                 .setSound(sound)
                 .setColor(Color.GREEN)
                 .addAction(NO_ICON, context.getString(R.string.action_cancel), pendingCancel)
-                .setContentIntent(pending);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        Notification notification = builder.build();
-        if (sticky) {
-            notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+                .setContentIntent(pending)
+                .setDeleteIntent(pendingDismiss);
+    }
+
+    @NonNull
+    private PendingIntent getPendingReceiver(int requestCode, int notificationId, String action) {
+        Intent receiver = new Intent(NotificationReceiver.INTENT);
+        receiver.putExtra(NotificationReceiver.EXTRA_ID, notificationId);
+        receiver.putExtra(NotificationReceiver.EXTRA_ACTION, action);
+        return PendingIntent.getBroadcast(context, requestCode, receiver, NO_FLAGS);
+    }
+
+    private PendingIntent getPendingCancelIntent(boolean sticky) {
+        TaskStackBuilder stack = TaskStackBuilder.create(context);
+        stack.addParentStack(MainActivity.class);
+        stack.addNextIntent(new Intent(context, MainActivity.class));
+        PendingIntent pending;
+        if (!sticky) {
+            pending = stack.getPendingIntent(NOTIFICATION_REQUEST_CODE_CANCEL, PendingIntent.FLAG_ONE_SHOT);
         } else {
-            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            pending = PendingIntent.getActivity(context, NOTIFICATION_REQUEST_CODE_CANCEL, new Intent(), NO_FLAGS);
         }
-        notificationManager.notify(NORMAL_NOTIFICATION_ID, notification);
+        return pending;
     }
 }

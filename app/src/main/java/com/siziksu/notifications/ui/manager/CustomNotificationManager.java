@@ -6,20 +6,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
 import com.siziksu.notifications.R;
-import com.siziksu.notifications.broadcast.NotificationListener;
+import com.siziksu.notifications.broadcast.NotificationReceiver;
 import com.siziksu.notifications.common.Utils;
 import com.siziksu.notifications.ui.activity.MainActivity;
 
 public class CustomNotificationManager {
 
-    private static final int CUSTOM_NOTIFICATION_ID = 1352;
-    private static final int CUSTOM_NOTIFICATION_REQUEST_CODE = 1352;
+    private static final int NOTIFICATION_ID = 1352;
+    private static final int NOTIFICATION_REQUEST_CODE_CANCEL = 13520;
+    private static final int NOTIFICATION_REQUEST_CODE_DISMISS = 13521;
     private static final int NO_FLAGS = 0;
 
     private final Context context;
@@ -44,30 +46,47 @@ public class CustomNotificationManager {
                 Utils.getSpannable(),
                 R.drawable.ic_exclamation_48dp
         );
-        TaskStackBuilder stack = TaskStackBuilder.create(context);
-        stack.addParentStack(MainActivity.class);
-        stack.addNextIntent(new Intent(context, MainActivity.class));
-        PendingIntent pending;
-        if (!sticky) {
-            pending = stack.getPendingIntent(CUSTOM_NOTIFICATION_REQUEST_CODE, PendingIntent.FLAG_ONE_SHOT);
-        } else {
-            pending = PendingIntent.getActivity(context, CUSTOM_NOTIFICATION_REQUEST_CODE, new Intent(), NO_FLAGS);
-        }
-        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_phone_call_24dp)
-                .setSound(sound)
-                .setCustomContentView(remoteViews)
-                .setCustomBigContentView(bigRemoteViews)
-                .setContentIntent(pending);
+        PendingIntent pending = getPendingIntent(sticky);
+        PendingIntent pendingDismiss = getPendingReceiver(NOTIFICATION_REQUEST_CODE_DISMISS, NOTIFICATION_ID, NotificationReceiver.ACTION_DISMISS);
+        NotificationCompat.Builder builder = getBuilder(remoteViews, bigRemoteViews, pending, pendingDismiss);
+        Notification notification = getNotification(sticky, builder);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.notify(NOTIFICATION_ID, notification);
+    }
+
+    @NonNull
+    private Notification getNotification(boolean sticky, NotificationCompat.Builder builder) {
         Notification notification = builder.build();
         if (sticky) {
             notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
         } else {
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
         }
-        notificationManager.notify(CUSTOM_NOTIFICATION_ID, notification);
+        return notification;
+    }
+
+    private NotificationCompat.Builder getBuilder(RemoteViews remoteViews, RemoteViews bigRemoteViews, PendingIntent pending, PendingIntent pendingDismiss) {
+        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        return new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_phone_call_24dp)
+                .setSound(sound)
+                .setCustomContentView(remoteViews)
+                .setCustomBigContentView(bigRemoteViews)
+                .setContentIntent(pending)
+                .setDeleteIntent(pendingDismiss);
+    }
+
+    private PendingIntent getPendingIntent(boolean sticky) {
+        TaskStackBuilder stack = TaskStackBuilder.create(context);
+        stack.addParentStack(MainActivity.class);
+        stack.addNextIntent(new Intent(context, MainActivity.class));
+        PendingIntent pending;
+        if (!sticky) {
+            pending = stack.getPendingIntent(NOTIFICATION_REQUEST_CODE_CANCEL, PendingIntent.FLAG_ONE_SHOT);
+        } else {
+            pending = PendingIntent.getActivity(context, NOTIFICATION_REQUEST_CODE_CANCEL, new Intent(), NO_FLAGS);
+        }
+        return pending;
     }
 
     private RemoteViews getRemoteViews(Context context, int layout, int iconResource, String title, CharSequence text) {
@@ -81,12 +100,17 @@ public class CustomNotificationManager {
 
     private RemoteViews getBigRemoteViews(Context context, int layout, int iconResource, String title, CharSequence text, int endIconResource) {
         RemoteViews remoteViews = getRemoteViews(context, layout, iconResource, title, text);
-        Intent cancel = new Intent(NotificationListener.INTENT);
-        cancel.putExtra(NotificationListener.EXTRA_ID, CUSTOM_NOTIFICATION_ID);
-        cancel.putExtra(NotificationListener.EXTRA_ACTION, NotificationListener.ACTION_CANCEL);
-        PendingIntent pending = PendingIntent.getBroadcast(context, CUSTOM_NOTIFICATION_REQUEST_CODE, cancel, NO_FLAGS);
-        remoteViews.setOnClickPendingIntent(R.id.notificationCancel, pending);
+        PendingIntent pendingCancel = getPendingReceiver(NOTIFICATION_REQUEST_CODE_CANCEL, NOTIFICATION_ID, NotificationReceiver.ACTION_CANCEL);
+        remoteViews.setOnClickPendingIntent(R.id.notificationCancel, pendingCancel);
         remoteViews.setImageViewResource(R.id.notificationEndIcon, endIconResource);
         return remoteViews;
+    }
+
+    @NonNull
+    private PendingIntent getPendingReceiver(int requestCode, int notificationId, String action) {
+        Intent receiver = new Intent(NotificationReceiver.INTENT);
+        receiver.putExtra(NotificationReceiver.EXTRA_ID, notificationId);
+        receiver.putExtra(NotificationReceiver.EXTRA_ACTION, action);
+        return PendingIntent.getBroadcast(context, requestCode, receiver, NO_FLAGS);
     }
 }
