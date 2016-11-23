@@ -4,23 +4,15 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.widget.RemoteViews;
 
 import com.siziksu.notifications.R;
 import com.siziksu.notifications.broadcast.NotificationListener;
-import com.siziksu.notifications.common.Constants;
 import com.siziksu.notifications.common.Utils;
 import com.siziksu.notifications.ui.activity.MainActivity;
 
@@ -42,14 +34,14 @@ public class CustomNotificationManager {
                 R.layout.notification,
                 R.drawable.ic_phone_call_24dp,
                 context.getString(R.string.jane_doe),
-                getSpannable()
+                Utils.getSpannable()
         );
         RemoteViews bigRemoteViews = getBigRemoteViews(
                 context,
                 R.layout.notification_big,
                 R.drawable.ic_phone_call_48dp,
                 context.getString(R.string.jane_doe),
-                getSpannable(),
+                Utils.getSpannable(),
                 R.drawable.ic_exclamation_48dp
         );
         TaskStackBuilder stack = TaskStackBuilder.create(context);
@@ -67,18 +59,6 @@ public class CustomNotificationManager {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         Notification notification = builder.build();
         notificationManager.notify(CUSTOM_NOTIFICATION_ID, notification);
-    }
-
-    @NonNull
-    private Spannable getSpannable() {
-        String line = Constants.NOTIFICATION_MESSAGE;
-        String day = Utils.getDayOfWeek();
-        int startPos = line.indexOf(Constants.FIRST_BLOCK);
-        String formatted = String.format(line, day);
-        Spannable spannable = new SpannableString(formatted);
-        spannable.setSpan(new StyleSpan(Typeface.BOLD), startPos, startPos + day.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannable.setSpan(new ForegroundColorSpan(Color.DKGRAY), startPos, startPos + day.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return spannable;
     }
 
     private RemoteViews getRemoteViews(Context context, int layout, int iconResource, String title, CharSequence text) {
