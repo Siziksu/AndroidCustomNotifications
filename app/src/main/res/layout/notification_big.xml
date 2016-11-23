@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary">
+                android:background="@color/notificationBackground">
 
     <ImageView
         android:id="@+id/notificationIcon"
@@ -11,11 +11,25 @@
         android:contentDescription="@string/app_name"
         android:layout_alignParentStart="true"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginStart="10dp"
         android:src="@drawable/ic_phone_call_48dp" />
 
+    <TextView
+        android:id="@+id/notificationTime"
+        android:layout_below="@+id/notificationIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/notificationInfo"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:text="@string/time"
+        android:textSize="12sp"
+        android:textColor="@color/notificationTime" />
+
     <RelativeLayout
+        android:id="@+id/notificationInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -32,7 +46,7 @@
             android:text="@string/app_name"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#ffffffff" />
+            android:textColor="@color/notificationTitle" />
 
         <TextView
             android:id="@+id/notificationText"
@@ -41,18 +55,7 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textSize="14sp"
-            android:textColor="#aaffffff" />
-
-        <TextView
-            android:id="@+id/notificationTime"
-            android:layout_below="@+id/notificationText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="5dp"
-            android:text="@string/app_name"
-            android:textSize="12sp"
-            android:textColor="#ffffffff" />
+            android:textColor="@color/notificationText" />
     </RelativeLayout>
 
     <ImageView
@@ -64,4 +67,25 @@
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_exclamation_48dp"
         android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:id="@+id/notificationSeparator"
+        android:layout_below="@+id/notificationInfo"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_toEndOf="@+id/notificationIcon"
+        android:contentDescription="@string/app_name"
+        android:background="@color/colorPrimaryDark" />
+
+    <Button
+        android:id="@+id/notificationCancel"
+        android:layout_below="@+id/notificationSeparator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/notificationIcon"
+        android:minHeight="35dp"
+        android:background="@null"
+        android:text="@string/action_cancel"
+        android:textSize="14sp"
+        android:textColor="@drawable/button_notification_text" />
 </RelativeLayout>

@@ -2,4 +2,7 @@
     <string name="app_name">Custom Notifications</string>
     <string name="action_normal">Normal Notification</string>
     <string name="action_custom">Custom Notification</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="time">"09:37"</string>
+    <string name="jane_doe">Jane Doe</string>
 </resources>
