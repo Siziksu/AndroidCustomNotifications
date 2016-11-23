@@ -1,4 +1,4 @@
-package com.siziksu.notifications.common.constants;
+package com.siziksu.notifications.common;
 
 public class Constants {
 

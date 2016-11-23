@@ -1,4 +1,4 @@
-package com.siziksu.notifications.common.constants;
+package com.siziksu.notifications.common;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

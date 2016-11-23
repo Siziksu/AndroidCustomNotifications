@@ -21,8 +21,8 @@ import android.text.style.StyleSpan;
 
 import com.siziksu.notifications.R;
 import com.siziksu.notifications.broadcast.NotificationListener;
-import com.siziksu.notifications.common.constants.Constants;
-import com.siziksu.notifications.common.constants.Utils;
+import com.siziksu.notifications.common.Constants;
+import com.siziksu.notifications.common.Utils;
 import com.siziksu.notifications.ui.activity.MainActivity;
 
 public class NotificationManager {
