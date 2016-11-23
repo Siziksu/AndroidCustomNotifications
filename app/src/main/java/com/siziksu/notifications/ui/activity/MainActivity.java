@@ -5,8 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.siziksu.notifications.R;
-import com.siziksu.notifications.ui.manager.CustomNotificationManager;
-import com.siziksu.notifications.ui.manager.NotificationManager;
+import com.siziksu.notifications.ui.manager.notifications.NotificationsManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,8 +16,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    private NotificationManager manager;
-    private CustomNotificationManager customManager;
+    private NotificationsManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        manager = new NotificationManager(this);
-        customManager = new CustomNotificationManager(this);
+        manager = new NotificationsManager(this);
     }
 
     @OnClick(R.id.buttonNormal)
@@ -37,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.buttonCustom)
     public void onCustomButtonClick() {
-        customManager.showCustomNotification(false);
+        manager.showCustomNotification(false);
     }
 
     @OnClick(R.id.buttonNormalSticky)
@@ -47,6 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.buttonCustomSticky)
     public void onCustomStickyButtonClick() {
-        customManager.showCustomNotification(true);
+        manager.showCustomNotification(true);
     }
 }
