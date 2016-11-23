@@ -35,7 +35,12 @@ public class NotificationManager {
         TaskStackBuilder stack = TaskStackBuilder.create(context);
         stack.addParentStack(MainActivity.class);
         stack.addNextIntent(new Intent(context, MainActivity.class));
-        PendingIntent pending = stack.getPendingIntent(NORMAL_NOTIFICATION_REQUEST_CODE, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pending;
+        if (!sticky) {
+            pending = stack.getPendingIntent(NORMAL_NOTIFICATION_REQUEST_CODE, PendingIntent.FLAG_ONE_SHOT);
+        } else {
+            pending = PendingIntent.getActivity(context, NORMAL_NOTIFICATION_REQUEST_CODE, new Intent(), NO_FLAGS);
+        }
         Intent cancel = new Intent(NotificationListener.INTENT);
         cancel.putExtra(NotificationListener.EXTRA_ID, NORMAL_NOTIFICATION_ID);
         cancel.putExtra(NotificationListener.EXTRA_ACTION, NotificationListener.ACTION_CANCEL);
@@ -52,12 +57,13 @@ public class NotificationManager {
                 .setSound(sound)
                 .setColor(Color.GREEN)
                 .addAction(NO_ICON, context.getString(R.string.action_cancel), pendingCancel)
-                .setContentIntent(pending)
-                .setAutoCancel(true);
+                .setContentIntent(pending);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         Notification notification = builder.build();
         if (sticky) {
             notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+        } else {
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
         }
         notificationManager.notify(NORMAL_NOTIFICATION_ID, notification);
     }

@@ -47,19 +47,25 @@ public class CustomNotificationManager {
         TaskStackBuilder stack = TaskStackBuilder.create(context);
         stack.addParentStack(MainActivity.class);
         stack.addNextIntent(new Intent(context, MainActivity.class));
-        PendingIntent pending = stack.getPendingIntent(CUSTOM_NOTIFICATION_REQUEST_CODE, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pending;
+        if (!sticky) {
+            pending = stack.getPendingIntent(CUSTOM_NOTIFICATION_REQUEST_CODE, PendingIntent.FLAG_ONE_SHOT);
+        } else {
+            pending = PendingIntent.getActivity(context, CUSTOM_NOTIFICATION_REQUEST_CODE, new Intent(), NO_FLAGS);
+        }
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_phone_call_24dp)
                 .setSound(sound)
                 .setCustomContentView(remoteViews)
                 .setCustomBigContentView(bigRemoteViews)
-                .setContentIntent(pending)
-                .setAutoCancel(true);
+                .setContentIntent(pending);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         Notification notification = builder.build();
         if (sticky) {
             notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+        } else {
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
         }
         notificationManager.notify(CUSTOM_NOTIFICATION_ID, notification);
     }
