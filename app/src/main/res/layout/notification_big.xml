@@ -85,7 +85,7 @@
         android:layout_toEndOf="@+id/notificationIcon"
         android:minHeight="40dp"
         android:background="@null"
-        android:text="@string/action_cancel"
+        android:text="@string/action_dismiss"
         android:textSize="14sp"
         android:textColor="@drawable/button_notification_text" />
 </RelativeLayout>

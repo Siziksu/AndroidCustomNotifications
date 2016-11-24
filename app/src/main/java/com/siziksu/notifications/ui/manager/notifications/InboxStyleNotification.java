@@ -29,6 +29,7 @@ import java.util.List;
 final class InboxStyleNotification {
 
     private static final int NO_FLAGS = 0;
+    private static final int MAX_MESSAGES_DISPLAYED = 3;
 
     private final Context context;
     private List<Message> messages = new ArrayList<>();
@@ -55,7 +56,7 @@ final class InboxStyleNotification {
                 .setLargeIcon(icon)
                 .setSound(sound)
                 .setColor(Color.GREEN)
-                .addAction(R.drawable.ic_close_14dp, context.getString(R.string.action_cancel), pendingCancel)
+                .addAction(R.drawable.ic_close_24dp, context.getString(R.string.action_dismiss), pendingCancel)
                 .setContentIntent(pending)
                 .setDeleteIntent(pendingDismiss);
         getNotificationContent(builder);
@@ -80,7 +81,7 @@ final class InboxStyleNotification {
                 }
                 inboxStyle.addLine(Utils.getInboxSpannable(messages.get(i).owner, messages.get(i).message));
             }
-            if (messages.size() > 3) {
+            if (messages.size() > MAX_MESSAGES_DISPLAYED) {
                 inboxStyle.addLine("...");
             }
             builder.setStyle(inboxStyle);

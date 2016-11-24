@@ -4,6 +4,7 @@
     <string name="action_inbox">Inbox Notification</string>
     <string name="action_custom">Custom Notification</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_dismiss">Dismiss</string>
     <string name="time">"09:37"</string>
     <string name="sticky_notifications">Sticky</string>
     <string name="normal_notifications">Normal</string>

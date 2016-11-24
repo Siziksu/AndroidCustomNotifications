@@ -50,7 +50,7 @@ final class NormalNotification {
                 .setStyle(style)
                 .setSound(sound)
                 .setColor(Color.GREEN)
-                .addAction(R.drawable.ic_close_14dp, context.getString(R.string.action_cancel), pendingCancel)
+                .addAction(R.drawable.ic_close_24dp, context.getString(R.string.action_dismiss), pendingCancel)
                 .setContentIntent(pending)
                 .setDeleteIntent(pendingDismiss);
     }
