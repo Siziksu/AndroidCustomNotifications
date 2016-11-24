@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         manager = new NotificationsManager(this);
+        manager.clearMessages();
     }
 
     @OnClick(R.id.buttonNormal)
@@ -35,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.buttonCustom)
     public void onCustomButtonClick() {
         manager.showCustomNotification(false);
+    }
+
+    @OnClick(R.id.buttonInboxStyle)
+    public void onInboxStyleButtonClick() {
+        manager.showInboxNotification(false);
     }
 
     @OnClick(R.id.buttonNormalSticky)

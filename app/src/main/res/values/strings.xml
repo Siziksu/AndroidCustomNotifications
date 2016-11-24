@@ -1,9 +1,15 @@
 <resources>
     <string name="app_name">Custom Notifications</string>
     <string name="action_normal">Normal Notification</string>
+    <string name="action_inbox">Inbox Notification</string>
     <string name="action_custom">Custom Notification</string>
     <string name="action_cancel">Cancel</string>
     <string name="time">"09:37"</string>
     <string name="sticky_notifications">Sticky</string>
     <string name="normal_notifications">Normal</string>
+    <string name="inbox_notifications">Inbox Style</string>
+    <string name="inbox_explanation">Each time you click the button a notification will be added. From the fourth will be summarized.</string>
+    <string name="you_have_new_messages">You have some new messages.</string>
+    <string name="new_messages_suffix">" new messages"</string>
+    <string name="more_suffix">" more"</string>
 </resources>

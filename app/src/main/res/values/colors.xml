@@ -21,4 +21,5 @@
     <color name="notificationButtonFocused">#acdc10</color>
     <color name="notificationButtonDefault">#4B6200</color>
     <color name="textColorPrimary">#ffffff</color>
+    <color name="textColorExplanation">#ff454545</color>
 </resources>

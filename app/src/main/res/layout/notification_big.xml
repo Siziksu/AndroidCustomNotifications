@@ -83,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/notificationIcon"
-        android:minHeight="35dp"
+        android:minHeight="40dp"
         android:background="@null"
         android:text="@string/action_cancel"
         android:textSize="14sp"
