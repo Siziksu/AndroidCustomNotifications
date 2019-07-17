@@ -58,7 +58,7 @@ internal class NormalNotification(private val context: Context) {
     }
 
     fun getPendingReceiver(requestCode: Int, notificationId: Int, action: String): PendingIntent {
-        val receiver = Intent(NotificationReceiver.INTENT)
+        val receiver = Intent(context, NotificationReceiver::class.java)
         receiver.putExtra(NotificationReceiver.EXTRA_ID, notificationId)
         receiver.putExtra(NotificationReceiver.EXTRA_ACTION, action)
         return PendingIntent.getBroadcast(context, requestCode, receiver, NO_FLAGS)
