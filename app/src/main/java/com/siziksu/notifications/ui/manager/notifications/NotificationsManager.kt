@@ -1,13 +1,16 @@
 package com.siziksu.notifications.ui.manager.notifications
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import com.siziksu.notifications.R
 import com.siziksu.notifications.broadcast.NotificationReceiver
 import com.siziksu.notifications.common.Constants
 import com.siziksu.notifications.common.Utils
 import com.siziksu.notifications.ui.activity.MainActivity
 
-class NotificationsManager(context: Context) {
+class NotificationsManager(val context: Context) {
 
     private val manager: NormalNotification = NormalNotification(context)
     private val inboxManager: InboxStyleNotification = InboxStyleNotification(context)
@@ -19,6 +22,7 @@ class NotificationsManager(context: Context) {
         val pendingDismiss = manager.getPendingReceiver(REQUEST_CODE_DISMISS, NOTIFICATION_ID, NotificationReceiver.ACTION_DISMISS)
         val builder = manager.getBuilder(pending!!, pendingCancel, pendingDismiss)
         val notification = manager.getNotification(sticky, builder)
+        setNotificationChannels()
         manager.publish(NOTIFICATION_ID, notification)
     }
 
@@ -29,6 +33,7 @@ class NotificationsManager(context: Context) {
         val pendingDismiss = inboxManager.getPendingReceiver(INBOX_REQUEST_CODE_DISMISS, INBOX_NOTIFICATION_ID, NotificationReceiver.ACTION_DISMISS)
         val builder = inboxManager.getBuilder(pending!!, pendingCancel, pendingDismiss)
         val notification = inboxManager.getNotification(sticky, builder)
+        setNotificationChannels()
         inboxManager.publish(INBOX_NOTIFICATION_ID, notification)
     }
 
@@ -56,7 +61,21 @@ class NotificationsManager(context: Context) {
         )
         val builder = custom.getBuilder(remoteViews, bigRemoteViews, pending!!, pendingDismiss)
         val notification = custom.getNotification(sticky, builder)
+        setNotificationChannels()
         custom.publish(CUSTOM_NOTIFICATION_ID, notification)
+    }
+
+    private fun setNotificationChannels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.getNotificationChannel(Constants.CHANNEL_1_ID).let {
+                val channel1 = NotificationChannel(Constants.CHANNEL_1_ID, Constants.CHANNEL_1_NAME, NotificationManager.IMPORTANCE_LOW)
+                channel1.description = Constants.CHANNEL_1_DESCRIPTION
+                channel1.enableLights(false)
+                channel1.enableVibration(false)
+                notificationManager.createNotificationChannel(channel1)
+            }
+        }
     }
 
     companion object {

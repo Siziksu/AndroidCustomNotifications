@@ -13,7 +13,6 @@ import android.support.v4.app.TaskStackBuilder
 import com.siziksu.notifications.R
 import com.siziksu.notifications.broadcast.NotificationReceiver
 import com.siziksu.notifications.common.Constants
-import com.siziksu.notifications.common.Constants.Companion.CHANNEL_1_ID
 import com.siziksu.notifications.common.Utils
 
 internal class NormalNotification(private val context: Context) {
@@ -32,7 +31,7 @@ internal class NormalNotification(private val context: Context) {
         val icon = BitmapFactory.decodeResource(context.resources, R.drawable.notification_icon)
         val style = NotificationCompat.BigTextStyle().bigText(Utils.spannable)
         val sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        return NotificationCompat.Builder(context, CHANNEL_1_ID)
+        return NotificationCompat.Builder(context, Constants.CHANNEL_1_ID)
             .setSmallIcon(R.drawable.ic_phone_call_24dp)
             .setLargeIcon(icon)
             .setContentTitle(Constants.FAKE_USER)

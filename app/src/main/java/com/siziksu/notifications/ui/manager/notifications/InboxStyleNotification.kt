@@ -17,7 +17,6 @@ import com.google.gson.reflect.TypeToken
 import com.siziksu.notifications.R
 import com.siziksu.notifications.broadcast.NotificationReceiver
 import com.siziksu.notifications.common.Constants
-import com.siziksu.notifications.common.Constants.Companion.CHANNEL_1_ID
 import com.siziksu.notifications.common.Preferences
 import com.siziksu.notifications.common.Utils
 import java.util.ArrayList
@@ -40,7 +39,7 @@ internal class InboxStyleNotification(private val context: Context) {
     fun getBuilder(pending: PendingIntent, pendingCancel: PendingIntent, pendingDismiss: PendingIntent): NotificationCompat.Builder {
         val icon = BitmapFactory.decodeResource(context.resources, R.drawable.notification_icon)
         val sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val builder = NotificationCompat.Builder(context, CHANNEL_1_ID)
+        val builder = NotificationCompat.Builder(context, Constants.CHANNEL_1_ID)
             .setSmallIcon(R.drawable.ic_phone_call_24dp)
             .setLargeIcon(icon)
             .setSound(sound)
